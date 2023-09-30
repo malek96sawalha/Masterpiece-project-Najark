@@ -1,0 +1,29 @@
+#container{
+    margin: auto;
+    padding-top: 5%;
+    text-align: center;
+    background-color: #FCF4EE ;
+    width: 600px;
+    height: 300px;
+}
+input{
+    width: 50%;
+    height: 30px;
+    border: #AB7442 solid 1px;
+    border-radius: 5px;
+
+}
+.submit{
+    width: 15%;
+    height: 30px;
+    border-radius: 5px;
+    background: -webkit-linear-gradient(bottom, #AB7442 , #f3dece);
+    background: -o-linear-gradient(bottom, #AB7442 , #f3dece);
+    background: -moz-linear-gradient(bottom, #AB7442 , #f3dece);
+    background: linear-gradient(bottom, #AB7442 , #f3dece);
+    -webkit-transition: all .4s;
+    -o-transition: all .4s;
+    -moz-transition: all .4s;
+    transition: all .4s
+    /* background-color:rgb(171, 116, 66); */
+}
