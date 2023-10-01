@@ -16,12 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('', [CategoryController::class, 'home'])->name('home');
+Route::get('/', [CategoryController::class, 'home'])->name('home');
 Route::get('products/{id}', [CategoryController::class,'products'])->name('products');
 Route::get('/productdetail/{id}', [CategoryController::class,'productdetail'])->name('productdetail');
 Route::get('/cart/{id}', [CategoryController::class,'addcart'])->name('addcart');
 Route::get('delete/{id}', [CategoryController::class,'deletecart'])->name('deletecart');
 Route::get('/cart', [CategoryController::class,'cart'])->name('cart');
+Route::get('/checkout', [CategoryController::class,'checkout'])->middleware(['auth','verified'])->name('checkout');
 
 
 Route::post('/stripe/payment', [StripeController::class, 'payment'])->name('stripe');
@@ -32,9 +33,9 @@ Route::get('/stripe/cancel', 'StripePaymentController@cancel')->name('stripe_can
 Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
-Route::get('/checkout', function () {
-    return view('pages.checkout');
-})->name('checkout');
+// Route::get('/checkout', function () {
+//     return view('pages.checkout');
+// })->name('checkout');
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');

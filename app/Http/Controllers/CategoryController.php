@@ -51,6 +51,12 @@ $categories = Category::all();
         // Return the view with the products
         return redirect()->route("cart");
     }
+    public function checkout()
+    {
+
+
+        return view("pages.checkout");
+    }
     public function deletecart($id)
     {
         // Ensure the 'cart' session variable is initialized

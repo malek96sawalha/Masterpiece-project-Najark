@@ -102,7 +102,7 @@
                             <span>${{ isset($products) ? $total  + 40 : 0 }}</span>
                         </p>
                     </div>
-                    <p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+                    <p><a href="{{ route('checkout')}}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
                 </div>
             </div>
         </div>

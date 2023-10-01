@@ -109,8 +109,8 @@
 
 
       <!-- Projects Start -->
-      <div class="container-xxl py-5">
-        <div class="container">
+      <div class="container-xxl py-5" >
+        <div class="container" id="projects">
             <div class="section-title text-center">
                 <h1 class="display-5 mb-5">Our Projects</h1>
             </div>
