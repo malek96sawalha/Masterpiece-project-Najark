@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,15 +21,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [CategoryController::class, 'home'])->name('home');
 Route::get('products/{id}', [CategoryController::class,'products'])->name('products');
 Route::get('/productdetail/{id}', [CategoryController::class,'productdetail'])->name('productdetail');
-Route::get('/cart/{id}', [CategoryController::class,'addcart'])->name('addcart');
-Route::get('delete/{id}', [CategoryController::class,'deletecart'])->name('deletecart');
-Route::get('/cart', [CategoryController::class,'cart'])->name('cart');
-Route::get('/checkout', [CategoryController::class,'checkout'])->middleware(['auth','verified'])->name('checkout');
+Route::get('/cart/{id}', [CartController::class,'store'])->name('addcart');
+Route::get('delete/{id}', [CartController::class,'destroy'])->name('deletecart');
+Route::get('/cart', [CartController::class,'index'])->name('cart');
+Route::get('checkout', [ShipmentController::class,'index'])->middleware(['auth','verified'])->name('checkout');
+Route::post('checkout', [ShipmentController::class,'store'])->name('checkout.store');
 
 
 Route::post('/stripe/payment', [StripeController::class, 'payment'])->name('stripe');
-Route::get('/stripe/success', 'StripePaymentController@success')->name('stripe_success');
-Route::get('/stripe/cancel', 'StripePaymentController@cancel')->name('stripe_cancel');
+Route::get('/stripe/success', [StripeController::class, 'success'])->name('stripe_success');
+Route::get('/stripe/cancel', [StripeController::class, 'cancel'])->name('stripe_cancel');
+// Route::post('/stripe/success', 'StripePaymentController@success')->name('stripe_success');
+// Route::get('/stripe/cancel', 'StripePaymentController@cancel')->name('stripe_cancel');
 
 
 Route::get('/about', function () {

@@ -15,10 +15,16 @@ return new class extends Migration
     {
         Schema::create('shipments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('userId');
-            $table->foreign('userId')->references('id')->on('users');
             $table->string('address');
+            $table->string('city');
+            $table->string('country');
+            $table->integer('phone');
+            $table->string('zip')->nullable();
+            $table->dateTime('shipmentDate');
+            $table->unsignedBigInteger('userId');
             $table->timestamps();
+
+            $table->foreign('userId')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

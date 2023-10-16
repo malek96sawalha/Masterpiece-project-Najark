@@ -83,19 +83,24 @@ $categories = Category::all();
 
     public function cart()
     {
-        $productIds = session('cart');
+        if(auth()->user()){
 
-        // Calculate product quantities by counting the occurrences of each product ID
-        $productQuantities = array_count_values($productIds);
+        }else{
 
-        // Use the Product model to retrieve data from the database based on the IDs
-        $products = Product::whereIn('id', array_keys($productQuantities))->get();
-
-        // Loop through the collection of products and assign their quantities
-        foreach ($products as $product) {
-            $product->quantity = $productQuantities[$product->id];
         }
-        return view("pages.cart")->with("products", $products);
+        // $productIds = session('cart');
+
+        // // Calculate product quantities by counting the occurrences of each product ID
+        // $productQuantities = array_count_values($productIds);
+
+        // // Use the Product model to retrieve data from the database based on the IDs
+        // $products = Product::whereIn('id', array_keys($productQuantities))->get();
+
+        // // Loop through the collection of products and assign their quantities
+        // foreach ($products as $product) {
+        //     $product->quantity = $productQuantities[$product->id];
+        // }
+        // return view("pages.cart")->with("products", $products);
     }
     public function index()
     {

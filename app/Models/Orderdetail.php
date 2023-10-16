@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Orderdetail extends Model
 {
+
+    protected $fillable = [
+        'orderDate', // Add 'userId' to the $fillable array
+        'customerId',// Other fillable properties here...
+        'totalPrice', // Add 'city' to the $fill
+        'shipmentId',
+       
+    ];
     public function user()
     {
         return $this->belongsTo(User::class,"userId");

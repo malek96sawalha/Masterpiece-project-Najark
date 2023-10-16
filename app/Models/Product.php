@@ -11,4 +11,9 @@ class Product extends Model
         $this->belongsTo(Category::class, 'categoryId');
     }
     use HasFactory;
+
+    public function cart()
+    {
+        return $this->hasMany(cart::class);
+    }
 }

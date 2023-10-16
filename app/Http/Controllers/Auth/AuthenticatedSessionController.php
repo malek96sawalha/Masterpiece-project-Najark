@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\Cart;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -29,6 +30,20 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        cart::where('customerId', auth()->user()->id)->delete();
+
+        $sessionCart = session('cart');
+
+        if($sessionCart != null){
+            foreach ($sessionCart as $item){
+            cart::create([
+            'productId' => $item['productId'],
+            'customerId' => auth()->user()->id,
+            'quantity' => $item['quantity']
+        ]);
+        }
+        }
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

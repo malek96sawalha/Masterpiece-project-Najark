@@ -9,7 +9,10 @@ class Shipment extends Model
 {
     protected $fillable = [
         'userId', // Add 'userId' to the $fillable array
-        'address'// Other fillable properties here...
+        'address',// Other fillable properties here...
+        'city', // Add 'city' to the $fill
+        'phone',
+        'shipmentDate',
     ];
     public function user()
     {

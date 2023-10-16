@@ -15,14 +15,16 @@ return new class extends Migration
     {
         Schema::create('orderdetails', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('userId');
-            $table->foreign('userId')->references('id')->on('users');
-            $table->unsignedBigInteger('paymentId');
-            $table->foreign('paymentId')->references('id')->on('payments');
+            $table->dateTime('orderDate');
+            $table->float('totalPrice');
+            $table->unsignedBigInteger('customerId');
             $table->unsignedBigInteger('shipmentId');
-            $table->foreign('shipmentId')->references('id')->on('shipments');
-            $table->float('total');
+            $table->unsignedBigInteger('paymentID');
             $table->timestamps();
+
+            $table->foreign('customerId')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('shipmentId')->references('id')->on('shipments')->onDelete('cascade');
+            $table->foreign('paymentId')->references('id')->on('payments')->onDelete('cascade');
         });
     }
 
