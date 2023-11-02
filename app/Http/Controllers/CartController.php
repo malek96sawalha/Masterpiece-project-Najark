@@ -20,6 +20,32 @@ class CartController extends Controller
             }
         }
 
+
+
+
+        // if (auth()->user()) {
+        //     $iduser = auth()->user()->id;
+        //     $cart = Carts::where('customerId', $iduser)->with('product')->get();
+
+        //     foreach ($cart as $item) {
+        //         array_push($Ncart, $item->productId);
+        //     }
+
+        //     $items = count($Ncart);
+        // } else {
+        //     $cart = session('cart');
+        // }
+
+
+
+
+
+
+
+
+
+
+
         $delivery = 40;
 
         return view('pages.cart', compact('cart', 'total', 'delivery'));

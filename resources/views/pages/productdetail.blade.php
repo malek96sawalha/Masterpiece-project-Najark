@@ -224,7 +224,8 @@
             </div>
             <div class="btns">
                 <a href="products.html">Back</a>
-                <a href="{{ route('addcart', ['id' => $product->id]) }}">Add To Cart</a>
+                {{-- @dd('ssss'); --}}
+                <a href="{{ route('addcart',$product->id) }}">Add To Cart</a>
 
             </div>
 

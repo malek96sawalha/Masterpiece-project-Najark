@@ -13,7 +13,7 @@ class Orderdetail extends Model
         'customerId',// Other fillable properties here...
         'totalPrice', // Add 'city' to the $fill
         'shipmentId',
-       
+
     ];
     public function user()
     {
@@ -27,9 +27,16 @@ class Orderdetail extends Model
     {
         return $this->belongsTo(Payment::class,"paymentId");
     }
-    public function orderItem()
+    // public function orderItem()
+    // {
+    //     return $this->hasMany(Orderitem::class,'orderId');
+    // }
+//     public function orderItem()
+// {
+//     return $this->hasMany(Orderitem::class, 'orderId');
+// }
+public function orderItem()
     {
-        return $this->hasMany(Orderitem::class);
+        return $this->hasMany(OrderItem::class, 'orderId');
     }
-    use HasFactory;
 }

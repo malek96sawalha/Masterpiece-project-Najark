@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Orderdetail;
+use App\Models\Orderitem;
 
 class ProfileController extends Controller
 {
@@ -16,8 +18,26 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        $userId = auth()->user()->id;
+        $orders = Orderdetail::where('customerId', $userId)->with('orderItem')->get();
+        // $orderItems = [];
+
+        foreach ($orders as $item) {
+            $orderItems[] = OrderItem::where('customerId', $userId)
+                ->where('orderId', $item->id)
+                ->with('product')
+                ->get();
+        }
+        // dd($orderItems);
+//    foreach($orderItems as $item){
+
+//        dd($item[1]);
+//    };
+
+        return view('pages.profile', [
             'user' => $request->user(),
+            'orderItems' => $orderItems,
+            'orders' => $orders,
         ]);
     }
 
@@ -26,6 +46,16 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+        logger($request->all());
+if ($request->hasFile('image')) {
+            // dd("dddddddddddddd");
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/users'), $imageName);
+            // $imagePath = $request->file('image')->store('images/admins', 'public'); // Adjust the storage path as needed
+            $request->user()->image = $imageName;
+        }
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {

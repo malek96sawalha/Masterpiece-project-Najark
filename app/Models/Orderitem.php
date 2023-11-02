@@ -17,11 +17,10 @@ class Orderitem extends Model
     ];
     public function orderDetail()
     {
-        return $this->belongsTo(Orderdetail::class,"orderId");
+        return $this->belongsTo(Orderdetail::class);
     }
     public function product()
     {
         return $this->belongsTo(Product::class,"productId");
     }
-    use HasFactory;
 }

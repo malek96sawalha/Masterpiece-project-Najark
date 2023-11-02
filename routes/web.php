@@ -5,6 +5,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\AdminsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,18 +70,31 @@ Route::get('/register', function () {
 
 
 
+Route::resource('admins', AdminsController::class);
+Route::resource('users', UsersController::class);
+Route::resource('products', ProductsController::class);
+Route::resource('categories', CategoriesController::class);
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
 // add the routes that user can not access whitout login here
 
+Route::get('/tables', function () {
+    return view('dashboard.tables');
+})->name('tables');
+Route::get('/dashboard', function () {
+    return view('dashboard.dashboard');
+})->name('dashboard');
+
+
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

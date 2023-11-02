@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Cart;
+use App\Models\shipment;
+use App\Models\Orderdetail;
+use App\Models\orderItem;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +37,7 @@ class StripeController extends Controller
             $user->name =$request->name ; // Replace with the actual phone number
             $user->save();
         }
-        $user->address()->updateOrCreate([], ['address' => $request->address ]);
+        // $user->address()->updateOrCreate([], ['address' => $request->address ]);
 
 
         $productIds = session('cart'); // Your array of product IDs
@@ -44,10 +49,7 @@ if (is_array($productIds) && count($productIds) > 0) {
     $products = Product::whereIn('id', array_keys($productIds))->get();
 
     // Define an array to hold the line items for Stripe
-    $lineItems = [];
 
-    // Loop through the collection of products and add them to the line items array
-  // Define an array to hold the line items for Stripe
 $lineItems = [];
 
 // Loop through the collection of products and add them to the line items array
@@ -78,6 +80,53 @@ $response = \Stripe\Checkout\Session::create([
     'success_url' => route('home'),
     'cancel_url' => route('stripe_cancel'),
 ]);
+        $iduser = auth()->user()->id;
+        $cart = Cart::where('customerId', $iduser)->with('product')->get();
+        // $cart = session('cart');
+
+        dd($cart);
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalPrice += $item->product->price * $item->quantity;
+        }
+
+        // dd($request->phone,now()->format('Y-m-d'));
+        $shipment = shipment::create([
+            'userId' => auth()->user()->id,
+            'shipmentDate' => now()->format('Y-m-d'),
+            // 'address' => $request->address,
+            // 'phone' => $request->phone,
+            // 'city' => $request->city,
+
+        ]);
+
+        $order = Orderdetail::create([
+            'orderDate' => now()->format('Y-m-d'),
+            'customerId' => auth()->user()->id,
+            'totalPrice' => $totalPrice,
+            'shipmentId' => $shipment->id,
+
+        ]);
+        $payment = Payment::create([
+            'orderDate' => now()->format('Y-m-d'),
+            'userId' => auth()->user()->id,
+            'amount' => $totalPrice,
+            'shipmentId' => $shipment->id,
+
+        ]);
+
+// dd($item->product);
+        foreach ($cart as $item){
+            orderItem::create([
+                'customerId' => auth()->user()->id,
+                'orderId' => $order->id,
+                'productId' => 35,
+                'quantity' => 70,
+                'price' => 1000,
+        ]);
+        }
+
+        cart::where('customerId', $iduser)->delete();
 
 return redirect()->away($response->url);
 
@@ -90,9 +139,63 @@ return redirect()->away($response->url);
 
     }
 
+    public function store(Request $request)
+    {
+        $iduser = auth()->user()->id;
+        $cart = Cart::where('customerId', $iduser)->with('product')->get();
+
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalPrice += $item->product->price * $item->quantity;
+        }
+
+        // dd($request->phone,now()->format('Y-m-d'));
+        $shipment = shipment::create([
+            'userId' => auth()->user()->id,
+            'shipmentDate' => now()->format('Y-m-d'),
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'city' => $request->city,
+
+        ]);
+
+        $order = Orderdetail::create([
+            'orderDate' => now()->format('Y-m-d'),
+            'customerId' => auth()->user()->id,
+            'totalPrice' => $totalPrice,
+            'shipmentId' => $shipment->id,
+
+        ]);
+        $payment = Payment::create([
+            'orderDate' => now()->format('Y-m-d'),
+            'userId' => auth()->user()->id,
+            'amount' => $totalPrice,
+            'shipmentId' => $shipment->id,
+
+        ]);
+
+// dd($item->product);
+        foreach ($cart as $item){
+            orderItem::create([
+                'customerId' => auth()->user()->id,
+                'orderId' => $order->id,
+                'productId' => $item->productId,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
+        ]);
+        }
+
+        cart::where('customerId', $iduser)->delete();
+
+
+
+        return redirect()->route('home');
+    }
+
     public function success()
     {
 
+return redirect()->route('home');
     }
 
     public function cancel()

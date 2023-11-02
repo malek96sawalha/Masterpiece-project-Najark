@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Project;
+use App\Models\cart;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
     /**
@@ -37,20 +38,24 @@ $categories = Category::all();
     }
     public function addcart($id)
     {
-        // Ensure the 'cart' session variable is initialized
-        if (!session()->has('cart')) {
-            session(['cart' => []]);
-        }
 
-        // Push the new $id into the 'cart' session array
-        session()->push('cart', $id);
+// dd('1n udjyjyjkukujujy');
+            // dd('2');
+             Cart::create([
+                'customerId' => auth()->user()->id,
+                'productId' => $id,
+                'quantity' => 1
+            ]);
 
-        // Retrieve all product IDs from the 'cart' session array
 
+// dd('4');
 
         // Return the view with the products
         return redirect()->route("cart");
     }
+    // public function yousef(){
+    //     dd('aaaaaaaaaaaaaaaaaa');
+    // }
     public function checkout()
     {
 
